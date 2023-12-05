@@ -1,0 +1,15 @@
+4eae10b85420580529f53ce266cc6134 *DESCRIPTION
+8cf077e153ffe2676f49621a3b46f7c9 *NAMESPACE
+d3526cccf7e289e90dbd116479113ef4 *NEWS.md
+00265c5329bcaa9e96571f8c19adad6c *R/Java.sparrow.notes.R
+77d31456f445f4570d806c8e785bce83 *R/plotZLA.R
+c711715d6ab4a00a9f0590cf33686b5e *R/testZLA.R
+58acdd714d0c351b199c75a1f992b2f1 *build/vignette.rds
+73c0d45731489792d340f26136dcf7d0 *data/Java.sparrow.notes.RData
+0db2ff55c28a460cad972560e6da8566 *inst/doc/ZLAvian.R
+e3413d0eb4d4eb71e0d3e2d9a49273ee *inst/doc/ZLAvian.Rmd
+c3221f0a33362189f731d1e97af9d7ca *inst/doc/ZLAvian.html
+39db00aa02a8bfadfcba8f36a5717da3 *man/Java.sparrow.notes.Rd
+9c6a968df523b91829844d5b50276c6b *man/plotZLA.Rd
+9c55c803df6e4e272da9b6e04ca65a1c *man/testZLA.Rd
+e3413d0eb4d4eb71e0d3e2d9a49273ee *vignettes/ZLAvian.Rmd

@@ -1,0 +1,89 @@
+---
+title: "ZLAvian"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  comment = "#>"
+)
+```
+## Introduction
+
+The package ZLAvian tests for patterns consistent with Zipf's Law of Abbreviation (ZLA) in animal communication following the methods described in Lewis et al. (202#) and Gilman et al. (202#). 
+
+```{r setup}
+library(ZLAvian)
+```
+
+## testZLA
+
+This function tests for evidence of ZLA in a sample of animal communication represented in a dataframe that must include columns with the following names and information:
+
+<ul>
+<li>A column "note" (factor/character) that describes the type to which each note, phrase, or syllable in the sample has been assigned;</li> 
+
+<li>A column "duration" (numeric) that describes the duration of each note, phrase, or syllable; and</li>
+
+<li>A column "ID" (factor) identifies the individual animal that produced each note, phrase, or
+syllable.</li>
+</ul>
+
+Other columns in the dataframe are ignored in the analysis.
+
+testZLA computes the mean concordance (i.e., Kendall's tau) across all individuals in the data set, and compares this to the expectation under the null hypothesis that note duration and frequency of use are unrelated. The null distribution is computed by permutation while constraining for the observed similarity of note repertoires among individuals. This controls for the possibility that individuals in the population learn their repertoires from others. See Lewis at al (202#) for the formal computation of the null distribution and Gilman et al (202#) for discussion. 
+
+Users can control the following parameters in testZLA:
+
+<ul>
+<li>minimum: the minimum number of times a note type must appear in the data set to be included in the analysis. All notes types that appear less than this number of times are removed from the sample before analysis. minimium must be a positive integer. The default value is 1. </li>
+
+<li>null: the number of permutations used to estimate the null distribution. This must be a positive integer 99 or greater. The default value is 999. </li>
+
+<li>est: takes values "mixed" or "mean." If est = "mixed," then the expected duration for each note type in the population is computed as the intercept of an intercept-only mixed effects model (fit using the lmer() function in the package lme4) that includes a random effect of individual ID. If est = "mean," then the expected duration for each note type in the population is computed as the weighted mean across all observations in the data set with each individual weighted equally. The expected durations for note types are used in the permutation algorithm. Estimation using the "mixed" approach is more precise - it gives greater weight to means based on more notes, because we can estimate those means more accurately. However, estimation using the "mean" approach is faster.</li>
+
+<li>cores: The permutation process in testZLA is computationally expensive. To make simulating the null distribution faster, testZLA allows users to assign the task to multiple cores (i.e., parallelization). cores must be an integer between 1 and the number of cores available on the user's machine, inclusive. Users can find the number of cores on their machines using the function detectCores() in the package parallel. The default value is 2.</li>
+</ul>
+
+```{r, warning = FALSE}
+data(testdata, package = "ZLAvian")
+```
+```{r, include = FALSE}
+data = Java.sparrow.notes
+```
+```{r, warning = FALSE}
+test.ZLA.output = testZLA(data, minimum = 1, null = 999, est = "mixed", cores = 2)
+```
+
+testZLA prints a table that reports concordances (tau) and p-values at the individual and population levels. Results at the individual level are obtained using the method described in Lewis et al (202#) and Gilman et al (202#). Results at the population level report the concordance between note type duration and frequency of use in the full data set, without considering which individuals produced which notes. Population-level concordances may be problematic when studying ZLA in animal communication (see Gilman et al 202# for discussion) but have been widely used to study ZLA in human languages. 
+
+Further information can be pulled from the function:
+
+<ul>
+<li>$stats: a matrix that reports Kendall's tau and the p-value associated with Kendall's tau computed at both the population and individual levels.</li>
+
+<li>$unweighted: in stats, the population mean value of Kendall's tau is computed with the value of tau for each individual weighted by its inverse variance. The inverse variance depends on the individual's repertoire size. In unweighted, Kendall's tau and the p-value associated with tau are computed with tau for each individual weighted equally regardless of repertoire size.</li>
+
+<li>$overview: a matrix that reports the total number of notes, total number of individuals, total number of note types, mean number of notes per individual, and mean number of note types produced by each individual in the dataset.</li>
+
+<li>$shannon: a matrix that reports the Shannon diversity of note classes in the populaiton and the mean Shannon diversity of note classes used by individuals in the dataset.</li>
+
+<li>$plotObject: a list containing data used by the plotZLA function to produce a web plot illustrating the within-individual concordance in the data set.
+
+## plotZLA
+
+plotZLA uses the output of testZLA to produce a webplot illustrating the concordance between note type duration and frequency of use within individuals in the population. 
+
+```{r, warning = FALSE}
+store <- testZLA(data, minimum = 1, null = 1000, est = "mixed", cores = 2)
+
+plotZLA(store)
+```
+
+In the figure produced by plotZLA, each point represents a note or phrase type in the population repertoire. Note types are joined by a line if both note types are produced by the same individual. The weight of the line is proportional to the number of individuals that produce both note types. The color of the lines indicates whether there is a positive (blue) or negative (red) concordance between the duration and frequency of use of the note types. Negative concordances are consistent with Zipf's law of abbreviation. Shades between blue and red indicate that the concordance is positive in some individuals and negative in others. For example, this can happen if some individuals use the note types more frequently than others, such that the rank order of frequency of use varies among individuals. Grey crosses centered on each point show the longest and shortest durations of the note type (vertical) and the highest and lowest frequencies of use (horizontal) in the population.

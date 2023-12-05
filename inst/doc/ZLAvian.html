@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>ZLAvian</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">ZLAvian</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The package ZLAvian tests for patterns consistent with Zipf’s Law of
+Abbreviation (ZLA) in animal communication following the methods
+described in Lewis et al. (202#) and Gilman et al. (202#).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ZLAvian)</span></code></pre></div>
+</div>
+<div id="testzla" class="section level2">
+<h2>testZLA</h2>
+<p>This function tests for evidence of ZLA in a sample of animal
+communication represented in a dataframe that must include columns with
+the following names and information:</p>
+<ul>
+<li>
+A column “note” (factor/character) that describes the type to which each
+note, phrase, or syllable in the sample has been assigned;
+</li>
+<li>
+A column “duration” (numeric) that describes the duration of each note,
+phrase, or syllable; and
+</li>
+<li>
+A column “ID” (factor) identifies the individual animal that produced
+each note, phrase, or syllable.
+</li>
+</ul>
+<p>Other columns in the dataframe are ignored in the analysis.</p>
+<p>testZLA computes the mean concordance (i.e., Kendall’s tau) across
+all individuals in the data set, and compares this to the expectation
+under the null hypothesis that note duration and frequency of use are
+unrelated. The null distribution is computed by permutation while
+constraining for the observed similarity of note repertoires among
+individuals. This controls for the possibility that individuals in the
+population learn their repertoires from others. See Lewis at al (202#)
+for the formal computation of the null distribution and Gilman et al
+(202#) for discussion.</p>
+<p>Users can control the following parameters in testZLA:</p>
+<ul>
+<li>
+minimum: the minimum number of times a note type must appear in the data
+set to be included in the analysis. All notes types that appear less
+than this number of times are removed from the sample before analysis.
+minimium must be a positive integer. The default value is 1.
+</li>
+<li>
+null: the number of permutations used to estimate the null distribution.
+This must be a positive integer 99 or greater. The default value is 999.
+</li>
+<li>
+est: takes values “mixed” or “mean.” If est = “mixed,” then the expected
+duration for each note type in the population is computed as the
+intercept of an intercept-only mixed effects model (fit using the lmer()
+function in the package lme4) that includes a random effect of
+individual ID. If est = “mean,” then the expected duration for each note
+type in the population is computed as the weighted mean across all
+observations in the data set with each individual weighted equally. The
+expected durations for note types are used in the permutation algorithm.
+Estimation using the “mixed” approach is more precise - it gives greater
+weight to means based on more notes, because we can estimate those means
+more accurately. However, estimation using the “mean” approach is
+faster.
+</li>
+<li>
+cores: The permutation process in testZLA is computationally expensive.
+To make simulating the null distribution faster, testZLA allows users to
+assign the task to multiple cores (i.e., parallelization). cores must be
+an integer between 1 and the number of cores available on the user’s
+machine, inclusive. Users can find the number of cores on their machines
+using the function detectCores() in the package parallel. The default
+value is 2.
+</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(testdata, <span class="at">package =</span> <span class="st">&quot;ZLAvian&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>test.ZLA.output <span class="ot">=</span> <span class="fu">testZLA</span>(data, <span class="at">minimum =</span> <span class="dv">1</span>, <span class="at">null =</span> <span class="dv">999</span>, <span class="at">est =</span> <span class="st">&quot;mixed&quot;</span>, <span class="at">cores =</span> <span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt;                          tau         p</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; individual level -0.03745038 0.4180000</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; population level -0.15000000 0.2088536</span></span></code></pre></div>
+<p>testZLA prints a table that reports concordances (tau) and p-values
+at the individual and population levels. Results at the individual level
+are obtained using the method described in Lewis et al (202#) and Gilman
+et al (202#). Results at the population level report the concordance
+between note type duration and frequency of use in the full data set,
+without considering which individuals produced which notes.
+Population-level concordances may be problematic when studying ZLA in
+animal communication (see Gilman et al 202# for discussion) but have
+been widely used to study ZLA in human languages.</p>
+<p>Further information can be pulled from the function:</p>
+<ul>
+<li>
+$stats: a matrix that reports Kendall’s tau and the p-value associated
+with Kendall’s tau computed at both the population and individual
+levels.
+</li>
+<li>
+$unweighted: in stats, the population mean value of Kendall’s tau is
+computed with the value of tau for each individual weighted by its
+inverse variance. The inverse variance depends on the individual’s
+repertoire size. In unweighted, Kendall’s tau and the p-value associated
+with tau are computed with tau for each individual weighted equally
+regardless of repertoire size.
+</li>
+<li>
+$overview: a matrix that reports the total number of notes, total number
+of individuals, total number of note types, mean number of notes per
+individual, and mean number of note types produced by each individual in
+the dataset.
+</li>
+<li>
+$shannon: a matrix that reports the Shannon diversity of note classes in
+the populaiton and the mean Shannon diversity of note classes used by
+individuals in the dataset.
+</li>
+<li>
+<p>$plotObject: a list containing data used by the plotZLA function to
+produce a web plot illustrating the within-individual concordance in the
+data set.</p>
+</div>
+<div id="plotzla" class="section level2">
+<h2>plotZLA</h2>
+<p>plotZLA uses the output of testZLA to produce a webplot illustrating
+the concordance between note type duration and frequency of use within
+individuals in the population.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>store <span class="ot">&lt;-</span> <span class="fu">testZLA</span>(data, <span class="at">minimum =</span> <span class="dv">1</span>, <span class="at">null =</span> <span class="dv">1000</span>, <span class="at">est =</span> <span class="st">&quot;mixed&quot;</span>, <span class="at">cores =</span> <span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt;                          tau         p</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; individual level -0.03745038 0.4255744</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; population level -0.15000000 0.2088536</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="fu">plotZLA</span>(store)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>In the figure produced by plotZLA, each point represents a note or
+phrase type in the population repertoire. Note types are joined by a
+line if both note types are produced by the same individual. The weight
+of the line is proportional to the number of individuals that produce
+both note types. The color of the lines indicates whether there is a
+positive (blue) or negative (red) concordance between the duration and
+frequency of use of the note types. Negative concordances are consistent
+with Zipf’s law of abbreviation. Shades between blue and red indicate
+that the concordance is positive in some individuals and negative in
+others. For example, this can happen if some individuals use the note
+types more frequently than others, such that the rank order of frequency
+of use varies among individuals. Grey crosses centered on each point
+show the longest and shortest durations of the note type (vertical) and
+the highest and lowest frequencies of use (horizontal) in the
+population.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
