@@ -9,9 +9,9 @@
 #' @usage data(Java.sparrow.notes)
 #' @format A list of 22970 rows and 3 variables{
 #'  \describe{
-#'    \item{duration}{Amount of seconds the note was sung for}
-#'    \item{note}{Identifier of note type}
-#'    \item{ID}{Identifier of individual bird}
+#'    \item{duration}{duration, in ms, of each note in the dataset}
+#'    \item{note}{note type to which note was assigned}
+#'    \item{ID}{identifier of the individual bird that produced each note}
 #'  }
 #'}
 #' @source \href{https://figshare.manchester.ac.uk/articles/dataset/Code_and_Data_from_Lewis_et_al_2023_Animal_Behavior/22550149}

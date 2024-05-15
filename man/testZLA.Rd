@@ -4,7 +4,14 @@
 \alias{testZLA}
 \title{Assess evidence for Zipf's law of abbreviation}
 \usage{
-testZLA(data, minimum = 1, null = 999, est = "mean", cores = 2)
+testZLA(
+  data,
+  minimum = 1,
+  null = 999,
+  est = "mean",
+  cores = 2,
+  transform = "log"
+)
 }
 \arguments{
 \item{data}{a dataframe containing columns "note" (factor/character; identifies the note/phrase type of each token), "duration" (numeric; describes the duration of each token), and "ID" (factor; identifies the individual that produced each token). Other columns in the dataframe are ignored.}
@@ -13,16 +20,46 @@ testZLA(data, minimum = 1, null = 999, est = "mean", cores = 2)
 
 \item{null}{the number of permutations used to estimate the null distribution. Must be a positive integer 99 or greater.}
 
-\item{est}{takes values "mixed" or "mean." If est = "mixed," then the expected duration for each note type in the population is computed as the intercept of an intercept-only mixed effects model (fit using the lmer() function of lme4) that includes a random effect of individual ID. If est = "mean," then the expected duration for each note type in the population is computed as the weighted mean across all observations in the dataset with each individual weighted equally. The expected durations for note types are used in the permutation algorithm.}
+\item{est}{takes values "mixed," "mean," or "median." If est = "mixed" then the expected logged duration for each note type in the population is computed as the intercept from an intercept-only mixed effects model, fit using the lmer() function of lme4 (Bates et al. 2015), that includes a random effect of individual ID. This computes a weighted mean across birds, and accords greater weights to birds that produce the note type more frequently. If est = "mean" then the expected logged duration for each note type in the population is computed as the mean of the means for the individual birds, with each individual bird weighted equally. This is faster than the "mixed" method. If est = "median" then the expected logged duration for each note type within birds is taken to be the median logged duration of the note type when produced by that bird, and the expected logged duration for each note type in the population is taken to be the median of the medians for the birds that produced that note type. The expected durations for note types are used in the permutation algorithm.}
 
 \item{cores}{divides (parallelizes) computation of the null distribution among cores. Cores must be an integer between 1 and the number of cores available on the users machine, inclusive.}
+
+\item{transform}{takes values "log" or "none." Indicates how duration data should be transformed prior to analysis. Gilman and colleagues (2023) argue that log transformation may often be appropriate for duration data, but some other measures might be better analysed as raw (untransformed) values.}
 }
 \value{
-a matrix that reports Kendall's tau and the p-value associated with Kendall's tau computed at both the population and individual levels.
+a list with components:
+
+\item{overview}{reports summary statistics for the dataset. These are "total notes," the total number of notes in the dataset; "total individuals," the number of individual birds in the dataset; "total note classes," the total number of note types represented in the dataset; "notes per individual," the average number of notes produced by individuals in the dataset; and "classes per individual," the average number of note classes that each individual produces.}
+
+\item{shannon}{the Shannon diversity of note types in the full dataset, and the mean Shannon diversity of note types produced by individuals in the dataset.}
+
+\item{stats}{a matrix reporting "individual level tau," the weighted mean concordance between note duration and frequency of use of notes within individuals, computed over all individuals in the dataset, with the concordance within each individual weighted by its inverse variance; "population level tau," the concordance between note duration and frequency of use in the full dataset, independent of the individuals that produced each note; and the p-values associated with each measure of concordance.}
+
+\item{unweighted}{the "individual level tau" and associated p-value, computed when concordances within individuals are not weighted by their inverse variances.}
+
+\item{plotObject}{data available to the function plotZLA and used to produce web plots illustrating individual level concordances.}
+
+\item{thresholds}{a matrix reporting the strength of concordance that would be needed to find significant (alpha = 0.05) evidence consistent with or contrary to ZLA in the study population. These are the 90 percent confidence intervals for the null distributions of tau (ie, individual level concordance). Values are reported for both the inverse-variance weighted and unweighted versions of tau.}
 }
 \description{
 Assesses evidence for Zipf's Law of Abbreviation in a population where samples from the population repertoire can be assigned to individuals.
 }
 \author{
-CD Durrant and R. Tucker Gilman (2023)
+CD Durrant and R. Tucker Gilman (2024)
+}
+\references{
+Bates, D., Maechler, M., Bolker, B., Walker, S. (2015).Fitting Linear Mixed-Effects Models Using lme4. \emph{Journal of Statistical Software}, 67(1), 1-48. (doi.org/10.18637/jss.v067.i01)
+
+Gilman, R. T., Durrant, C. D., Malpas, L., and Lewis, R. N. (2023) Does Zipf’s law of abbreviation shape birdsong? \emph{bioRxiv} (doi.org/10.1101/2023.12.06.569773)
+
+Lewis, R. N., Kwong, A., Soma, M., de Kort, S. R., Gilman, R. T. (2023) Java sparrow song conforms to Mezerath’s law but not to Zipf’s law of abbreviation. \emph{bioRxiv} (doi.org/10.1101/2023.12.13.571437)
+}
+\examples{
+#Test for evidence of ZLA in the songs of 73 Java sparrows.
+#Most parameters are set to their default values, but
+#"null" is set to the minimum value to make the example run
+#quickly. Thus, the taus reported will be accurate, but the
+#p-values will be imprecise.
+
+testZLA(Java.sparrow.notes, null = 99)
 }

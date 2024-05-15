@@ -4,23 +4,51 @@
 \alias{plotZLA}
 \title{Web plots to illustrate Zipf's law of abbreviation}
 \usage{
-plotZLA(inputObject)
+plotZLA(
+  inputObject,
+  title = "",
+  ylab = "duration (s)",
+  x.scale = "log",
+  y.base = 2
+)
 }
 \arguments{
 \item{inputObject}{output from the function testZLA}
+
+\item{title}{a title to be printed over the web plot}
+
+\item{ylab}{a label for the y-axis}
+
+\item{x.scale}{takes values "log" or "linear." Sets scaling for the x-axis.}
+
+\item{y.base}{takes values 2 or 10. Controls tick mark positions on the y-axis. When set to 2, tick marks indicate that values differ by a factor of 2. When set to 10, tick marks indicate that values differ by a factor of 10. If data was not log transformed in the analysis being illustrated, then the y-axis is linear and this argument is ignored.}
 }
 \value{
-Produces a webplot illustrating concordance between note duration and frequency of use within individuals. Requires output from the testZLA function.
+Produces a web plot illustrating concordance between note duration and frequency of use within individuals. Requires output from the testZLA function.
 }
 \description{
-Produces a webplot. It requires data calculated from the testZLA function.
+Produces a web plot. Requires data from the testZLA function.
 }
 \details{
-In the figure produced by plotZLA, each point represents a note or phrase type in the population repertoire. Note types are joined by a line if both note types are produced by the same individual. The weight of the line is proportional to the number of individuals that produce both note types. The color of the lines indicates whether there is a positive (blue) or negative (red) concordance between the duration and frequency of use of the note types. Negative concordances are consistent with Zipf's law of abbreviation. Shades between blue and red indicate that the concordance is positive in some individuals and negative in others. For example, this can happen if some individuals use the note types more frequently than others, such that the rank order of frequency of use varies among individuals. Grey crosses centered on each point show the longest and shortest durations of the note type (vertical) and the highest and lowest frequencies of use (horizontal) in the population.
+In the figure produced by plotZLA, each point represents a note or phrase type in the population repertoire. Note types are joined by a line if at least one individual produces both note types. The weight of the line is proportional to the number of individuals that produce both note types. The color of the lines indicates whether there is a positive (blue) or negative (red) concordance between the duration and frequency of use of the note types. Negative concordances are consistent with Zipf's law of abbreviation. Shades between blue and red indicate that the concordance is positive in some individuals and negative in others. For example, this can happen if some individuals use the note types more frequently than others, such that the rank order of frequency of use varies among individuals. Grey crosses centered on each point show the longest and shortest durations of the note type (vertical) and the highest and lowest frequencies of use (horizontal) in the population.
 }
 \references{
-Davis, M. K. and Chen, G. (2007) Graphic Kendall's tau. Computational Statistics & Data Analysis, 51(5), 2373-2378. doi: 10.2307/2346786
+Davis, M. K. and Chen, G. (2007) Graphic Kendall's tau. \emph{Computational Statistics & Data Analysis}, 51(5), 2373-2378. (doi.org/10.2307/2346786)
+
+Gilman, R. T., Durrant, C. D., Malpas, L., and Lewis, R. N. (2023) Does Zipf’s law of abbreviation shape birdsong? \emph{bioRXiv} (doi.org/10.1101/2023.12.06.569773)
 }
 \author{
-CD Durrant and R. Tucker Gilman (2023)
+CD Durrant and R. Tucker Gilman (2024)
+}
+\examples{
+#Test for evidence of ZLA in the songs of 73 Java sparrows
+#and produce a web plot to illustrate the result. In testZLA,
+#"null" is set to the minimum value to make the example run
+#quickly, and thus the p-values reported are likely to be
+#imprecise. This will not affect the web plot, because plotZLA
+#does not rely on accurate p-values or null distributions.
+
+ZLA.object=testZLA(Java.sparrow.notes, null = 99)
+
+plotZLA(ZLA.object, ylab = "duration (ms)", x.scale = "linear")
 }
